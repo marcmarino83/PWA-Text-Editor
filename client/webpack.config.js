@@ -18,12 +18,39 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        title: 'Text Editor',
+      }),
+      new InjectManifest({
+        swSrc: './src-sw.js', // Path to your custom service worker file
+        swDest: 'service-worker.js',
+      }),
+      new WebpackPwaManifest({
+        name: 'Text Editor',
+        short_name: 'Editor',
+        description: 'A text editor that can be installed on your desktop.',
+        background_color: '#ffffff',
+        theme_color: '#ffffff',
+        start_url: '/',
+        display: 'standalone',
+        icons: [
+          {
+            src: path.resolve('src/images/icon.png'), // Path to your app icon
+            sizes: [96, 128, 192, 256, 384, 512], // Multiple sizes
+            destination: path.join('assets', 'icons'),
+          },
+        ],
+      }),
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader'],
+        },
+        // Other loaders
       ],
     },
   };
